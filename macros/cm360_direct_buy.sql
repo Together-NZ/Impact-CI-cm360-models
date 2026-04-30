@@ -34,6 +34,8 @@ WITH cm360reference AS (
         CAST(JSON_VALUE(JSON_EXTRACT(data, "$.richMediaVideoMidpoints")) AS INT64) AS video_50_completion,
         CAST(JSON_VALUE(JSON_EXTRACT(data, "$.richMediaVideoThirdQuartileCompletes")) AS INT64) AS video_75_completion,
         CAST(JSON_VALUE(JSON_EXTRACT(data, "$.richMediaVideoCompletions")) AS INT64) AS video_completion,
+        CAST(JSON_VALUE(JSON_EXTRACT(data, "$.richMediaVideoPlays")) AS INT64) AS video_plays,
+        CAST(JSON_VALUE(JSON_EXTRACT(data, "$.richMediaTrueViewViews")) AS INT64) AS video_views,
         JSON_VALUE(JSON_EXTRACT(data, "$.site")) AS site_name,
         ROW_NUMBER() OVER (
             PARTITION BY 
@@ -69,8 +71,7 @@ WITH cm360reference AS (
         {{ source(source_name, table_name) }}
     WHERE 
         LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.site"))) NOT IN ('the trade desk', 'ttd', 'facebook', 'meta', 'dv360', 'dv_360', 'twitch', 'programmatic', 'dart', 'google ads', 'sem')
-        AND LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.advertiser"))) NOT LIKE {{lower_advertiser_name}}
-)
+       AND LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.advertiser")))  LIKE '%{{lower_advertiser_name}}%')
 
 SELECT *,
     CASE 
