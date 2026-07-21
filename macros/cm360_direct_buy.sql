@@ -137,8 +137,7 @@ SELECT *,
     SPLIT(creative_name, '_')[SAFE_OFFSET(6)] AS ad_format,
     SPLIT(creative_name, '_')[SAFE_OFFSET(7)] AS creative_descr,
     SPLIT(campaign_name, '_')[SAFE_OFFSET(2)] AS campaign_descr,
-    0 AS media_cost,
-    'CM360' AS platform
+    0 AS media_cost
 FROM cm360reference
 WHERE row_num = 1
 
