@@ -1,4 +1,4 @@
-{% macro cm360_direct_buy(source_name, table_name,lower_advertiser_name) %}
+{% macro cm360_direct_buy_no_dv360(source_name, table_name,lower_advertiser_name) %}
 WITH cm360reference AS (
     SELECT
         JSON_VALUE(JSON_EXTRACT(data, "$.placementId")) AS placement_id,
