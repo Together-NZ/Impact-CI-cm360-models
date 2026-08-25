@@ -72,7 +72,7 @@ SELECT *,
         WHEN LOWER(site_name) LIKE '%spotify%' THEN 'Spotify'
         WHEN LOWER(site_name) LIKE '%tiktok%' THEN 'Tiktok'
         WHEN LOWER(site_name) LIKE '%youtube%' THEN 'Youtube'
-        ELSE INITCAP(SPLIT(site_name, ' ')[OFFSET(0)])
+        ELSE site_name
     END AS publisher,
     CASE 
         WHEN ARRAY_LENGTH(SPLIT(placement, '_')) >= 5 THEN SPLIT(placement, '_')[OFFSET(4)]
