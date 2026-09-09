@@ -128,7 +128,10 @@ SELECT *,
         ELSE 'Other'
     END AS ad_format_detail,
     SPLIT(creative_name, '_')[SAFE_OFFSET(6)] AS ad_format,
-    SPLIT(creative_name, '_')[SAFE_OFFSET(7)] AS creative_descr,
+    CASE
+        WHEN ARRAY_LENGTH(SPLIT(creative_name, '_')) >= 8 THEN SPLIT(creative_name, '_')[SAFE_OFFSET(7)]
+        ELSE creative_name
+    END AS creative_descr,
     SPLIT(campaign_name, '_')[SAFE_OFFSET(2)] AS campaign_descr,
     0 AS media_cost
 FROM cm360reference

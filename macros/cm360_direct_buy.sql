@@ -43,7 +43,7 @@ WITH cm360reference AS (
                 JSON_VALUE(JSON_EXTRACT(data, "$.advertiser")),
                 JSON_VALUE(JSON_EXTRACT(data, "$.creativeType")),
                 JSON_VALUE(JSON_EXTRACT(data, "$.creativeId")),
-                JSON_VALUE(JSON_EXTRACT(data, "$.creative")),
+                
                 JSON_VALUE(JSON_EXTRACT(data, "$.advertiserId")),
                 JSON_VALUE(JSON_EXTRACT(data, "$.dv360CreativeId")),
                 JSON_VALUE(JSON_EXTRACT(data, "$.dv360Creative")),
@@ -51,7 +51,7 @@ WITH cm360reference AS (
                 JSON_VALUE(JSON_EXTRACT(data, "$.dv360LineItemId")),
                 safe.PARSE_DATE('%Y-%m-%d', JSON_VALUE(JSON_EXTRACT(data, "$.campaignEndDate"))),
                 JSON_VALUE(JSON_EXTRACT(data, "$.campaignId")),
-                JSON_VALUE(JSON_EXTRACT(data, "$.campaign")),
+                
                 safe.PARSE_DATE('%Y-%m-%d', JSON_VALUE(JSON_EXTRACT(data, "$.campaignStartDate"))),
                 JSON_VALUE(JSON_EXTRACT(data, "$.clickThroughUrl")),
                 safe.PARSE_DATE('%Y-%m-%d', JSON_VALUE(JSON_EXTRACT(data, "$.date"))),
@@ -135,7 +135,10 @@ SELECT *,
         ELSE 'Other'
     END AS ad_format_detail,
     SPLIT(creative_name, '_')[SAFE_OFFSET(6)] AS ad_format,
-    SPLIT(creative_name, '_')[SAFE_OFFSET(7)] AS creative_descr,
+    CASE
+        WHEN ARRAY_LENGTH(SPLIT(creative_name, '_')) >= 8 THEN SPLIT(creative_name, '_')[SAFE_OFFSET(7)]
+        ELSE creative_name
+    END AS creative_descr,
     SPLIT(campaign_name, '_')[SAFE_OFFSET(2)] AS campaign_descr,
     0 AS media_cost
 FROM cm360reference
