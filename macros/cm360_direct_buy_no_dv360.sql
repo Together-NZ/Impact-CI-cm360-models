@@ -62,7 +62,7 @@ WITH cm360reference AS (
         {{ source(source_name, table_name) }}
     WHERE 
         (LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.site"))) NOT IN ('the trade desk', 'ttd', 'facebook', 'meta', 'dv360', 'dv_360', 'twitch', 'programmatic', 'dart', 'google ads', 'sem')
-        AND ( NOT EXISTS (SELECT 1 FROM UNNEST(SPLIT(JSON_VALUE(JSON_EXTRACT(data,"$.site")),' ')) AS site WHERE LOWER(site) IN ('ttd', 'facebook', 'meta','twitch', 'programmatic', 'dart', 'sem')))
+        AND ( NOT EXISTS (SELECT 1 FROM UNNEST(SPLIT(JSON_VALUE(JSON_EXTRACT(data,"$.site")),' ')) AS site WHERE LOWER(site) IN ('ttd', 'facebook', 'meta','twitch', 'programmatic', 'dart', 'sem','display')))
        AND LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.advertiser")))  LIKE '%{{lower_advertiser_name}}%')
 )
 
