@@ -60,10 +60,29 @@ WITH cm360reference AS (
         ) AS row_num
     FROM 
         {{ source(source_name, table_name) }}
-    WHERE 
-        (LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.site"))) NOT IN ('the trade desk', 'ttd', 'facebook', 'meta', 'dv360', 'dv_360', 'twitch', 'programmatic', 'dart', 'google ads', 'sem')
-        AND ( NOT EXISTS (SELECT 1 FROM UNNEST(SPLIT(JSON_VALUE(JSON_EXTRACT(data,"$.site")),' ')) AS site WHERE LOWER(site) IN ('ttd', 'facebook', 'meta','twitch', 'programmatic', 'dart', 'sem','display')))
-       AND LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.advertiser")))  LIKE '%{{lower_advertiser_name}}%')
+    WHERE
+        (
+            (
+                LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.site"))) NOT IN (
+                    'the trade desk', 'ttd', 'facebook', 'meta', 'dv360', 'dv_360',
+                    'twitch', 'programmatic', 'dart', 'google ads', 'sem'
+                )
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM UNNEST(SPLIT(JSON_VALUE(JSON_EXTRACT(data, "$.site")), ' ')) AS site
+                    WHERE LOWER(site) IN (
+                        'ttd', 'facebook', 'meta', 'twitch', 'programmatic', 'dart', 'sem'
+                    )
+                )
+            )
+            OR EXISTS (
+                SELECT 1
+                FROM UNNEST(SPLIT(JSON_VALUE(JSON_EXTRACT(data, "$.site")), ' ')) AS site
+                WHERE LOWER(site) IN ('dv360', 'dv_360')
+                    AND LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.creative"))) LIKE '%direct%'
+            )
+        )
+        AND LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.advertiser"))) LIKE '%{{lower_advertiser_name}}%'
 )
 
 SELECT *,
