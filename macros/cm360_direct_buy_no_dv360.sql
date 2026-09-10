@@ -65,7 +65,7 @@ WITH cm360reference AS (
             (
                 LOWER(JSON_VALUE(JSON_EXTRACT(data, "$.site"))) NOT IN (
                     'the trade desk', 'ttd', 'facebook', 'meta', 'dv360', 'dv_360',
-                    'twitch', 'programmatic', 'dart', 'google ads', 'sem'
+                    'twitch', 'programmatic', 'dart', 'google ads', 'sem','dv360','dv_360'
                 )
                 AND NOT EXISTS (
                     SELECT 1
