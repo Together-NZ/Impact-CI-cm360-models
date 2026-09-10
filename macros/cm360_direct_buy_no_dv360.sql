@@ -71,7 +71,8 @@ WITH cm360reference AS (
                     SELECT 1
                     FROM UNNEST(SPLIT(JSON_VALUE(JSON_EXTRACT(data, "$.site")), ' ')) AS site
                     WHERE LOWER(site) IN (
-                        'ttd', 'facebook', 'meta', 'twitch', 'programmatic', 'dart', 'sem'
+                        'ttd', 'facebook', 'meta', 'twitch', 'programmatic', 'dart', 'sem',
+                        'dv360','dv_360'
                     )
                 )
             )
